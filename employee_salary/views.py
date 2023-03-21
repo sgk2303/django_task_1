@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Employee, Department
 
-@api_view(['GET','POST','PUT','DELETE'])
+@api_view(['GET'])
 def highest_paid_employee(request):
         # Create a list of dictionaries containing the highest paid employee in each department
         highest_paid_employees = []
