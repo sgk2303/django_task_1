@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --out ./kubernetes
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --out ./kubernetes
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/django-task-1-default: "true"
+        io.kompose.service: web
+    spec:
+      containers:
+        - args:
+            - python
+            - /app/manage.py
+            - runserver
+            - 0.0.0.0:8000
+          image: sgk2303/django_task_1
+          name: web
+          ports:
+            - containerPort: 8000
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/src/app
+              name: web-claim0
+      restartPolicy: Always
+      volumes:
+        - name: web-claim0
+          persistentVolumeClaim:
+            claimName: web-claim0
+status: {}
